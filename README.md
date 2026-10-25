@@ -9,10 +9,10 @@ Program Java berbasis konsol untuk membantu petugas perpustakaan kampus mengurus
 - **Kelompok:** 24
 
 ## Anggota Kelompok 24
-1. *Kardila Varani Barutu* - 2509116009 - Kelas A
-2. *Zahra Maysita* - 2509116015 - Kelas A
-3. *Mohammed Rifqy Syahdi* - 2509116037 - Kelas A
-4. *Nabila Fitriani* - 2509116063 - Kelas B
+1. Kardila Varani Barutu - 2509116009 - Kelas A
+2. Zahra Maysita - 2509116015 - Kelas A
+3. Mohammed Rifqy Syahdi - 2509116037 - Kelas A
+4. Nabila Fitriani - 2509116063 - Kelas B
 
 ## Struktur File Proyek
 ```text
@@ -58,13 +58,13 @@ Variabelnya `String[][][] lokasiBuku`, ukurannya 3 x 5 x 10. Kami membayangkanny
 Variabelnya `ArrayList<String> daftarBuku`. Jumlah buku di perpustakaan terus berubah, sehingga kami butuh wadah yang ukurannya bisa menyesuaikan sendiri. ArrayList mendukung tambah, tampil, dan hapus buku tanpa kami mengatur kapasitas.
 
 ### Stack
-Variabelnya `Stack<String> riwayatTransaksi`. Tiap peminjaman yang berhasil dicatat dimasukkan ke tumpukan lewat `push()`, jadi transaksi paling baru selalu ada di puncak. Sifat LIFO ini yang kami manfaatkan saat membatalkan transaksi.
+Variabelnya `Stack<String> riwayatTransaksi`. Tiap peminjaman yang berhasil dicatat dimasukkan ke tumpukan lewat `push()`, jadi transaksi paling baru selalu ada di puncak. Sifat LIFO ini yang kami manfaatkan saat membatalkan transaksi. Di menu pembatalan, pengguna menyebut nama peminjam, lalu program menelusuri tumpukan dari atas dan membatalkan transaksi terbaru atas nama itu.
 
 ### Queue
 Variabelnya `Queue<String> antrianMhs`, dengan `LinkedList` sebagai objek di belakangnya. Mahasiswa yang datang lebih dulu dipanggil lebih dulu (FIFO), seperti antrean di loket sungguhan.
 
 ## Penjelasan Source Code
-Bagian ini menelusuri `SistemPerpustakaan.java` dari atas ke bawah. Penjelasannya kami tulis sendiri sesuai yang kami pahami dari kodenya.
+Bagian ini menelusuri `SistemPerpustakaan.java` dari atas sampai bawah. Kodenya kami tampilkan utuh per bagian, lalu dijelaskan satu per satu dengan bahasa kami sendiri.
 
 ### 1. Package dan import
 ```java
@@ -76,9 +76,11 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
 ```
-Baris `package` menunjukkan file ini ada di paket `com.mycompany.sistemperpustakaan`, dan letak foldernya di `src/` harus mengikuti nama itu. Lima baris `import` setelahnya memanggil kelas yang tidak otomatis tersedia di Java. `ArrayList` untuk daftar buku, `LinkedList` dan `Queue` untuk antrean, `Scanner` untuk membaca ketikan dari keyboard, dan `Stack` untuk riwayat transaksi.
+Baris `package` menunjukkan bahwa file ini berada di paket `com.mycompany.sistemperpustakaan`. Letak foldernya di `src/` harus mengikuti nama paket itu.
 
-### 2. Kelas utama dan variabel
+Lima baris `import` memanggil kelas yang tidak otomatis tersedia di Java. `ArrayList` dipakai untuk daftar buku, `LinkedList` dan `Queue` untuk antrean, `Scanner` untuk membaca ketikan dari keyboard, dan `Stack` untuk riwayat transaksi.
+
+### 2. Kelas utama dan deklarasi variabel
 ```java
 public class SistemPerpustakaan {
     public static void main(String[] args) {
@@ -95,33 +97,41 @@ public class SistemPerpustakaan {
 
             boolean lanjut = true;
 ```
-`SistemPerpustakaan` adalah kelas utamanya, dan program mulai berjalan dari method `main`. Di dalamnya ada `try (Scanner input = ...)`. Dengan bentuk ini, `Scanner` ditutup otomatis saat blok `try` selesai, jadi kami tidak perlu menulis `close()` sendiri.
+`public class SistemPerpustakaan` adalah kelas utama, dan namanya harus sama dengan nama file. Program mulai berjalan dari `public static void main`, yang selalu jadi pintu masuk program Java.
 
-`kategoriBuku` langsung kami isi dengan empat teks. `statPinjam` dibuat 4 x 7 dan semua selnya otomatis 0. `lokasiBuku` dibuat 3 x 5 x 10 dan semua selnya awalnya `null`, artinya belum ada buku.
+Baris `try (Scanner input = new Scanner(System.in))` membuat objek `Scanner` yang membaca dari keyboard (`System.in`). Dengan bentuk try-with-resources ini, `Scanner` ditutup otomatis saat blok `try` selesai, jadi kami tidak perlu menulis `close()` sendiri.
 
-Tiga baris berikutnya membuat koleksi kosong untuk daftar buku, riwayat transaksi, dan antrean. Tulisan `<String>` memberi tahu Java bahwa isinya teks. Antrean dideklarasikan sebagai `Queue` tetapi dibuat dari `LinkedList`, karena `Queue` hanya aturan main dan butuh kelas nyata yang menjalankannya.
+`kategoriBuku` adalah array 1D bertipe `String` yang langsung diisi empat nama kategori. `statPinjam` adalah array 2D bertipe `int` berukuran 4 x 7, dan semua selnya otomatis bernilai 0. `lokasiBuku` adalah array 3D bertipe `String` berukuran 3 x 5 x 10, dan semua selnya awalnya `null`, artinya belum ada buku. Tulisan setelah `//` hanyalah komentar pengingat dan tidak ikut dijalankan.
 
-Variabel `lanjut` adalah penanda untuk perulangan utama. Selama masih `true`, menu akan terus tampil.
+Tiga baris berikutnya membuat koleksi yang masih kosong: `daftarBuku` (ArrayList), `riwayatTransaksi` (Stack), dan `antrianMhs` (Queue). Tulisan `<String>` memberi tahu Java bahwa isinya berupa teks. Antrean dideklarasikan sebagai `Queue` tetapi dibuat dari `LinkedList`, karena `Queue` hanya aturan main dan butuh kelas nyata yang menjalankannya.
+
+Variabel `lanjut` bertipe `boolean` dan jadi penanda perulangan utama. Selama nilainya `true`, menu akan terus tampil.
 
 ### 3. Perulangan menu utama
 ```java
-            while (lanjut) {
-                System.out.println("\n=== SISTEM MANAJEMEN PERPUSTAKAAN KAMPUS ===");
-                System.out.println("1. Tampilkan Kategori Buku");
-                ...
-                System.out.println("7. Keluar");
-                System.out.print("Pilih menu : ");
+while (lanjut) {
+    System.out.println("\n=== SISTEM MANAJEMEN PERPUSTAKAAN KAMPUS ===");
+    System.out.println("1. Tampilkan Kategori Buku");
+    System.out.println("2. Kelola Daftar Buku");
+    System.out.println("3. Cari/Simpan Lokasi Buku");
+    System.out.println("4. Kelola Antrian Mahasiswa");
+    System.out.println("5. Catat Peminjaman & Statistik");
+    System.out.println("6. Batalkan Transaksi Terakhir (Undo)");
+    System.out.println("7. Keluar");
+    System.out.print("Pilih menu : ");
 
-                int pilihan = input.nextInt();
-                input.nextLine();
+    int pilihan = input.nextInt();
+    input.nextLine();
 
-                switch (pilihan) {
+    switch (pilihan) {
 ```
-`while (lanjut)` mengulang seluruh menu sampai `lanjut` diubah jadi `false`, yang terjadi di menu 7. `\n` di awal judul sengaja dipakai untuk memberi satu baris kosong supaya tampilan tidak menempel dengan keluaran sebelumnya. Di baris "Pilih menu" kami memakai `print` tanpa `ln` agar kursor tetap sebaris dengan pertanyaannya.
+`while (lanjut)` mengulang seluruh isi menu sampai `lanjut` diubah menjadi `false`, yang terjadi di menu 7.
 
-`input.nextInt()` membaca angka pilihan ke variabel `pilihan`. Satu hal yang sempat bikin kami bingung: `nextInt()` tidak ikut mengambil tombol Enter yang diketik. Kalau dibiarkan, `nextLine()` berikutnya akan langsung terlewati. Karena itu ada `input.nextLine()` yang hasilnya tidak disimpan, fungsinya cuma membuang sisa Enter.
+Delapan baris `System.out.println` pertama menampilkan judul dan tujuh pilihan menu. Tanda `\n` di awal judul memberi satu baris kosong supaya tampilannya tidak menempel dengan keluaran sebelumnya. Baris `System.out.print("Pilih menu : ")` memakai `print` tanpa `ln`, sehingga kursor tetap sebaris dengan pertanyaannya.
 
-`switch (pilihan)` lalu memilih blok yang dijalankan. Kami memakai bentuk `case 1 -> { ... }` dari Java modern, yang tidak butuh `break` supaya tidak "tembus" ke case berikutnya.
+`int pilihan = input.nextInt()` membaca angka pilihan dan menyimpannya di `pilihan`. Ada satu hal yang sempat membuat kami bingung: `nextInt()` tidak ikut mengambil tombol Enter yang diketik. Kalau dibiarkan, `nextLine()` berikutnya akan langsung terlewati. Karena itu ada `input.nextLine()` yang hasilnya tidak disimpan, tugasnya hanya membuang sisa Enter.
+
+`switch (pilihan)` memilih blok yang dijalankan sesuai angka tadi. Kami memakai bentuk `case 1 -> { ... }` dari Java modern, yang tidak butuh `break` untuk mencegah eksekusi tembus ke case berikutnya.
 
 ### 4. Case 1: tampilkan kategori (Array 1D)
 ```java
@@ -132,12 +142,16 @@ case 1 -> {
     }
 }
 ```
-Perulangan `for` berjalan dari `i = 0` sampai sebelum `kategoriBuku.length`, yaitu 4. Tiap putaran mencetak nomor dan nama kategori. Nomornya `i + 1` karena indeks array mulai dari 0, sedangkan orang terbiasa melihat daftar yang dimulai dari 1.
+Baris pertama mencetak judul bagian. Perulangan `for` berjalan dari `i = 0` selama `i` masih lebih kecil dari `kategoriBuku.length` (yaitu 4), dan `i++` menambah `i` satu per putaran. Di tiap putaran, program mencetak nomor urut dan nama kategori pada indeks `i`. Nomornya ditulis `i + 1` karena indeks array dimulai dari 0, sedangkan orang terbiasa melihat daftar yang dimulai dari 1.
 
 ### 5. Case 2: kelola daftar buku (ArrayList)
 ```java
 case 2 -> {
-    ...
+    System.out.println("\n-- Kelola Daftar Buku --");
+    System.out.println("1. Tambah Buku");
+    System.out.println("2. Tampilkan Buku");
+    System.out.println("3. Hapus Buku");
+    System.out.print("Pilih aksi: ");
     String aksiBuku = input.nextLine();
 
     if (aksiBuku.equals("1")) {
@@ -160,13 +174,15 @@ case 2 -> {
     }
 }
 ```
-Pilihan submenu dibaca sebagai teks dan dibandingkan dengan `.equals()`. Untuk membandingkan isi teks kami memakai `equals`, bukan `==`, karena `==` hanya memeriksa apakah dua variabel menunjuk objek yang sama.
+Empat baris `println` pertama menampilkan judul dan tiga pilihan submenu, lalu `print("Pilih aksi: ")` menanyakan pilihannya. Jawabannya dibaca dengan `nextLine()` sebagai teks ke variabel `aksiBuku`, dan dibandingkan dengan `.equals()`. Untuk membandingkan isi teks kami memakai `equals`, bukan `==`, karena `==` hanya memeriksa apakah dua variabel menunjuk objek yang sama.
 
-Pilihan 1 meminta judul lalu menaruhnya di ujung `daftarBuku` lewat `add()`. Pilihan 2 mencetak `daftarBuku` begitu saja, dan Java otomatis menampilkannya dalam bentuk `[buku1, buku2]`. Pilihan 3 memanggil `remove(bukuHapus)`. Method ini mengembalikan `true` kalau judulnya ada dan berhasil dihapus, atau `false` kalau tidak ditemukan, dan nilai itulah yang dipakai `if` untuk memilih pesan. Bagian `else` paling akhir menangkap ketikan di luar 1 sampai 3.
+Percabangan `if` pertama (pilihan "1") membaca judul buku ke `bukuBaru`, lalu `daftarBuku.add(bukuBaru)` menaruhnya di ujung ArrayList. Cabang `else if` kedua (pilihan "2") mencetak `daftarBuku` langsung, dan Java otomatis menampilkannya dalam bentuk `[buku1, buku2]`. Cabang ketiga (pilihan "3") membaca judul yang mau dihapus ke `bukuHapus`, lalu memanggil `daftarBuku.remove(bukuHapus)`. Method ini mengembalikan `true` kalau judulnya ada dan berhasil dihapus, atau `false` kalau tidak ditemukan, dan nilai itu langsung dipakai oleh `if` bersarang untuk memilih pesan "Buku berhasil dihapus." atau "Buku tidak ketemu.". Bagian `else` paling akhir menangkap semua ketikan selain 1, 2, dan 3.
 
 ### 6. Case 3: simpan lokasi buku (Array 3D)
 ```java
 case 3 -> {
+    System.out.println("\n-- Lokasi Buku --");
+    System.out.print("Masukkan nama buku: ");
     String namaBuku = input.nextLine();
 
     int salahInputLokasi = 0;
@@ -178,6 +194,7 @@ case 3 -> {
         System.out.print("Posisi (0-9): ");
         int posisi = input.nextInt();
 
+        // cek validasi lokasi
         if (lantai >= 0 && lantai < 3 && rak >= 0 && rak < 5 && posisi >= 0 && posisi < 10) {
             lokasiBuku[lantai][rak][posisi] = namaBuku;
             System.out.println("Buku '" + namaBuku + "' disimpen di Lantai " + lantai + ", Rak " + rak + ", Posisi " + posisi);
@@ -194,16 +211,19 @@ case 3 -> {
     }
 }
 ```
-Judul buku dibaca dulu. Setelah itu `salahInputLokasi` dibuat sebagai penghitung salah ketik yang mulai dari 0, dan `while` hanya jalan selama penghitung itu masih di bawah 3.
+Setelah judul dan prompt ditampilkan, judul buku dibaca ke `namaBuku`. Variabel `salahInputLokasi` dibuat sebagai penghitung salah ketik yang mulai dari 0, dan `while (salahInputLokasi < 3)` hanya berjalan selama penghitung itu masih di bawah 3.
 
-Di dalam perulangan, program meminta tiga angka: lantai, rak, dan posisi. Kondisi `if` memastikan ketiganya ada dalam rentang yang sesuai ukuran array. Pemeriksaan ini penting. Tanpanya, angka seperti 5 untuk lantai akan membuat Java melempar `ArrayIndexOutOfBoundsException` dan programnya langsung berhenti.
+Di dalam perulangan, program meminta tiga angka dan menyimpannya ke `lantai`, `rak`, dan `posisi`. Kondisi `if` memakai operator `&&` (dan) untuk memastikan ketiganya ada dalam rentang yang sesuai ukuran array. Pemeriksaan ini penting. Tanpanya, angka seperti 5 untuk lantai akan membuat Java melempar `ArrayIndexOutOfBoundsException` dan programnya langsung berhenti. Komentar `// cek validasi lokasi` di atasnya hanya penanda untuk kami.
 
-Kalau lokasinya valid, judul disimpan ke `lokasiBuku[lantai][rak][posisi]`, pesan sukses tampil, dan `break` mengeluarkan kita dari `while`. Kalau tidak valid, penghitung naik satu dan pengguna diminta mencoba lagi. Di kesalahan ketiga muncul pesan bahwa program kembali ke menu utama, dan karena syarat `< 3` sudah tidak terpenuhi, perulangan berhenti sendiri.
+Kalau lokasinya valid, `lokasiBuku[lantai][rak][posisi] = namaBuku` menyimpan judul ke koordinat itu, pesan sukses ditampilkan dengan menggabungkan teks dan variabel memakai tanda `+`, dan `break` mengeluarkan program dari `while`. Kalau tidak valid, `salahInputLokasi++` menambah penghitung satu, lalu muncul pesan "Lokasi nggak valid!". `if` bersarang di dalamnya memeriksa apakah ini kesalahan ketiga. Kalau iya, pengguna diberi tahu bahwa program kembali ke menu utama, dan karena syarat `< 3` sudah tidak terpenuhi, perulangan berhenti sendiri. Kalau belum, pengguna diminta mencoba lagi.
 
 ### 7. Case 4: antrean mahasiswa (Queue)
 ```java
 case 4 -> {
-    ...
+    System.out.println("\n-- Antrian Mahasiswa --");
+    System.out.println("1. Tambah Mahasiswa ke Antrian");
+    System.out.println("2. Panggil Mahasiswa Berikutnya");
+    System.out.print("Pilih aksi: ");
     String aksiAntrean = input.nextLine();
 
     switch (aksiAntrean) {
@@ -224,27 +244,34 @@ case 4 -> {
     }
 }
 ```
-Di sini ada `switch` di dalam `switch`, untuk memilih antara menambah atau memanggil mahasiswa. Karena pilihannya dibaca sebagai teks, case-nya ditulis `"1"` dan `"2"`.
+Tiga baris `println` pertama menampilkan judul dan dua pilihan, lalu pilihan dibaca ke `aksiAntrean`. Setelah itu ada `switch` di dalam `switch`, untuk memilih antara menambah atau memanggil mahasiswa. Karena pilihannya dibaca sebagai teks, case-nya ditulis `"1"` dan `"2"`.
 
-Pilihan 1 memasukkan nama ke belakang antrean dengan `add()`. Pilihan 2 mengecek `isEmpty()` lebih dulu supaya program tidak mencoba mengambil dari antrean kosong. Kalau ada isinya, `poll()` mengambil sekaligus menghapus nama yang paling depan, jadi yang datang paling awal dilayani paling awal.
+Case `"1"` membaca nama ke `namaMhs`, memasukkannya ke belakang antrean dengan `antrianMhs.add(namaMhs)`, lalu menampilkan pesan bahwa nama itu sudah masuk. Case `"2"` mengecek `!antrianMhs.isEmpty()` lebih dulu (tanda `!` berarti "tidak"), supaya program tidak mengambil dari antrean kosong. Kalau ada isinya, `antrianMhs.poll()` mengambil sekaligus menghapus nama yang paling depan, jadi mahasiswa yang datang paling awal dilayani paling awal. Kalau kosong, muncul pesan "Antrian lagi kosong.". Bagian `default` menangkap pilihan selain 1 dan 2.
 
 ### 8. Case 5: catat peminjaman dan statistik (Array 2D dan Stack)
 ```java
 case 5 -> {
-    ...
+    System.out.println("\n-- Catat Peminjaman --");
+
+    System.out.print("Masukkan nama peminjam: ");
     String namaPeminjam = input.nextLine();
-    ...
+    System.out.print("Masukkan judul buku yang dipinjam: ");
     String judulDipinjam = input.nextLine();
 
     int salahInputPinjam = 0;
     while (salahInputPinjam < 3) {
-        ...
+        System.out.println("\nUntuk data statistik, lengkapi info berikut:");
+
+        System.out.println("Kategori Buku:");
         for (int i = 0; i < kategoriBuku.length; i++) {
             System.out.println(i + " : " + kategoriBuku[i]);
         }
         System.out.print("Pilih kategori (0-4): ");
         int kat = input.nextInt();
-        ...
+
+        System.out.println("\nHari Peminjaman:");
+        System.out.println("0 : Senin\n1 : Selasa\n2 : Rabu\n3 : Kamis\n4 : Jumat\n5 : Sabtu\n6 : Minggu");
+        System.out.print("Pilih hari (0-6): ");
         int hari = input.nextInt();
         input.nextLine();
 
@@ -252,25 +279,34 @@ case 5 -> {
             statPinjam[kat][hari]++;
             String transaksi = namaPeminjam + " meminjam '" + judulDipinjam + "' (Kategori: " + kategoriBuku[kat] + ")";
             riwayatTransaksi.push(transaksi);
-            ...
+
+            System.out.println("\nSip, transaksi berhasil dicatat!");
+            System.out.println("Total peminjaman kategori " + kategoriBuku[kat] + " di hari ke-" + hari + " : " + statPinjam[kat][hari]);
             break;
         } else {
             salahInputPinjam++;
-            ...
+            System.out.println("\n[!] Input kategori atau hari salah!");
+            if (salahInputPinjam == 3) {
+                System.out.println("Udah 3 kali salah input!, kembali ke menu utama. <<");
+            } else {
+                System.out.println("Ayo masukin angka yang bener.");
+            }
         }
     }
 }
 ```
-Nama peminjam dan judul buku dibaca sebagai teks. Setelah itu kami memakai pola yang sama dengan menu 3: satu penghitung salah ketik dan `while` yang memberi maksimal tiga kesempatan.
+Judul ditampilkan, lalu nama peminjam dan judul buku dibaca sebagai teks ke `namaPeminjam` dan `judulDipinjam`. Setelah itu kami memakai pola yang sama dengan menu 3: penghitung `salahInputPinjam` dan `while` yang memberi maksimal tiga kesempatan.
 
-Di dalam perulangan, daftar kategori dicetak dengan `for` dari array 1D, lalu program meminta nomor kategori (`kat`) dan nomor hari (`hari`). `input.nextLine()` sesudah membaca `hari` lagi-lagi untuk membuang sisa Enter.
+Di dalam perulangan, `for` mencetak daftar kategori dari array 1D dengan format `nomor : nama`, lalu program meminta nomor kategori ke variabel `kat`. Teks petunjuknya tertulis "(0-4)", padahal kategori yang sah hanya 0 sampai 3, dan ini akan kami bahas di bagian analisis. Satu `println` yang berisi banyak `\n` mencetak tujuh nama hari sekaligus, masing-masing di baris baru. Nomor hari dibaca ke `hari`, dan `input.nextLine()` sesudahnya membuang sisa Enter.
 
-Kalau `kat` ada di 0 sampai 3 dan `hari` di 0 sampai 6, baris `statPinjam[kat][hari]++` menambah satu pada sel statistik yang bersangkutan. Lalu teks transaksi dirangkai dari nama, judul, dan nama kategori, dan dimasukkan ke tumpukan dengan `push()`. Pesan sukses menampilkan total terbaru di sel itu, dan `break` mengakhiri perulangan. Kalau inputnya di luar rentang, penghitung kesalahan naik dan pengguna diminta mengulang, sampai tiga kali.
+Kalau `kat` ada di 0 sampai 3 dan `hari` di 0 sampai 6, baris `statPinjam[kat][hari]++` menambah satu pada sel statistik yang bersangkutan. Lalu teks transaksi dirangkai dari nama peminjam, judul buku, dan nama kategori (diambil dari `kategoriBuku[kat]`), dan dimasukkan ke tumpukan dengan `riwayatTransaksi.push(transaksi)`. Dua `println` berikutnya menampilkan pesan sukses dan total terbaru di sel tadi, lalu `break` mengakhiri perulangan.
+
+Kalau input di luar rentang, `salahInputPinjam++` menambah penghitung dan muncul peringatan. `if` bersarang memeriksa apakah ini kesalahan ketiga. Kalau iya, program kembali ke menu utama. Kalau belum, pengguna diminta memasukkan angka lagi.
 
 ### 9. Case 6: batalkan transaksi (Stack)
 ```java
 case 6 -> {
-    ...
+    System.out.println("\n-- Batalkan Transaksi Berdasarkan Nama --");
     if (!riwayatTransaksi.isEmpty()) {
         System.out.print("Masukkan nama peminjam yang ingin dibatalkan: ");
         String namaBatal = input.nextLine();
@@ -284,6 +320,7 @@ case 6 -> {
             if (transaksi.toLowerCase().startsWith(namaBatal.toLowerCase() + " ") && !ketemu) {
                 System.out.println("Berhasil membatalkan transaksi: " + transaksi);
                 ketemu = true;
+
             } else {
                 tempStack.push(transaksi);
             }
@@ -296,21 +333,22 @@ case 6 -> {
         if (!ketemu) {
             System.out.println("Transaksi atas nama '" + namaBatal + "' nggak ketemu tuh.");
         }
+
     } else {
         System.out.println("Nggak ada riwayat transaksi nih.");
     }
     break;
 }
 ```
-Bagian ini yang paling rumit di program kami. Awalnya program mengecek apakah riwayat kosong. Kalau kosong, tidak ada yang bisa dibatalkan dan langsung muncul pesan di bagian `else`.
+Bagian ini yang paling rumit di program kami. Judul menunya memang "berdasarkan nama", artinya pengguna menyebut nama peminjam yang transaksinya mau dibatalkan. Program mengecek `!riwayatTransaksi.isEmpty()` lebih dulu. Kalau riwayat kosong, tidak ada yang bisa dibatalkan, dan pesan di bagian `else` paling bawah yang tampil.
 
-Kalau ada isinya, pengguna mengetik nama peminjam yang transaksinya mau dibatalkan. Kendalanya, Stack hanya bisa diambil dari atas, sementara transaksi yang dicari bisa ada di tengah tumpukan. Karena itu kami menyiapkan `tempStack` sebagai tumpukan bantu dan `ketemu` sebagai penanda.
+Kalau ada isinya, nama yang dicari dibaca ke `namaBatal`. Kendalanya, Stack hanya bisa diambil dari atas, sedangkan transaksi yang dicari bisa saja ada di tengah tumpukan. Karena itu kami menyiapkan `tempStack` sebagai tumpukan bantu dan `ketemu` sebagai penanda yang awalnya `false`.
 
-Perulangan pertama mengeluarkan transaksi satu per satu dengan `pop()`, mulai dari yang terbaru. Tiap transaksi dicek apakah diawali nama yang dicari. Kedua teks diubah ke huruf kecil dengan `toLowerCase()` supaya besar kecil huruf tidak jadi masalah. Spasi sengaja ditambahkan setelah nama di `startsWith`, supaya nama "Ani" tidak ikut cocok dengan transaksi atas nama "Anita". Kalau cocok dan belum ada yang dibatalkan, transaksi itu dibuang dan `ketemu` menjadi `true`. Syarat `!ketemu` membuat hanya satu transaksi yang dibatalkan, yaitu yang paling baru atas nama itu. Transaksi lain dipindah ke `tempStack`.
+Perulangan `while` pertama berjalan selama riwayat belum habis. Di tiap putaran, `riwayatTransaksi.pop()` mengambil transaksi dari puncak (yang terbaru dulu) dan menyimpannya di `transaksi`. Kondisi `if` memeriksa apakah transaksi itu diawali nama yang dicari. Kedua teks diubah ke huruf kecil dengan `toLowerCase()` supaya besar kecil huruf tidak jadi masalah. Spasi ditambahkan setelah nama di `startsWith`, supaya nama "Ani" tidak ikut cocok dengan transaksi atas nama "Anita". Syarat `!ketemu` memastikan hanya satu transaksi yang dibatalkan, yaitu yang paling baru atas nama itu. Kalau cocok, pesan berhasil ditampilkan dan `ketemu` jadi `true`. Kalau tidak cocok, transaksi dipindahkan ke `tempStack`.
 
-Perulangan kedua memindahkan isi `tempStack` kembali ke `riwayatTransaksi`. Karena tumpukan dibalik dua kali, urutan transaksi yang tersisa kembali seperti semula. Terakhir, kalau `ketemu` masih `false`, pengguna diberi tahu bahwa namanya tidak ada di riwayat.
+Perulangan kedua memindahkan isi `tempStack` kembali ke `riwayatTransaksi`. Karena tumpukan dibalik dua kali, urutan transaksi yang tersisa kembali seperti semula. Terakhir, kalau `ketemu` masih `false`, pengguna diberi tahu bahwa nama itu tidak ada di riwayat. Pernyataan `break` di ujung blok sebenarnya tidak wajib untuk bentuk `->`, tetapi tidak menimbulkan masalah.
 
-### 10. Case 7 dan default
+### 10. Case 7, default, dan penutup
 ```java
 case 7 -> {
     System.out.println("\nTerima kasih udah pakai sistem ini!");
@@ -323,9 +361,11 @@ default -> {
     break;
 }
 ```
-Menu 7 mengubah `lanjut` menjadi `false`. Setelah `switch` selesai, `while (lanjut)` mengecek ulang dan berhenti. Blok `try` ikut berakhir, `Scanner` tertutup, dan program selesai. Pernyataan `break` di dalam blok panah ini sebenarnya tidak wajib, tapi tidak membuat masalah.
+Menu 7 menampilkan pesan penutup dan mengubah `lanjut` menjadi `false`. Setelah `switch` selesai, `while (lanjut)` mengecek ulang kondisinya, mendapati `false`, dan berhenti. Blok `try` pun berakhir, `Scanner` tertutup otomatis, dan program selesai.
 
 Bagian `default` menangkap semua angka selain 1 sampai 7. Pesan kesalahan ditampilkan, lalu menu muncul lagi di putaran berikutnya.
+
+Kurung kurawal penutup di akhir file menutup, berturut-turut dari yang paling dalam, `switch`, `while`, blok `try`, method `main`, dan kelas `SistemPerpustakaan`.
 
 ## Screenshot Hasil Eksekusi
 
@@ -417,6 +457,7 @@ Ada juga beberapa kekurangan yang kami temukan, dan lebih baik kami tulis apa ad
 3. Pembatalan transaksi hanya menghapus catatan di Stack. Angka di `statPinjam` tidak ikut dikurangi, jadi statistik masih menghitung transaksi yang sudah dibatalkan.
 4. Semua data hilang begitu program ditutup, karena belum ada penyimpanan ke file atau database.
 5. Menu 3 tidak memeriksa apakah judul buku sudah ada di `daftarBuku`, dan sel lokasi yang sudah terisi akan tertimpa tanpa peringatan.
+6. Riwayat transaksi belum punya menu untuk dilihat. Isi Stack hanya muncul sebagai satu pesan saat sebuah transaksi dibatalkan, sehingga petugas tidak bisa melihat transaksi terakhir tanpa membatalkannya.
 
 Kalau dikembangkan lagi, hal-hal di atas yang akan kami perbaiki lebih dulu, misalnya dengan `try-catch` untuk input dan pengurangan statistik saat undo.
 
