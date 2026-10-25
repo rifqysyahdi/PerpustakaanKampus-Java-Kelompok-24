@@ -9,39 +9,24 @@ Program Java berbasis konsol untuk membantu petugas perpustakaan kampus mengurus
 - **Kelompok:** 24
 
 ## Anggota Kelompok 24
-1. Kardila Varani Barutu - 2509116009 - Kelas A
-2. Zahra Maysita - 2509116015 - Kelas A
-3. Mohammed Rifqy Syahdi - 2509116037 - Kelas A
-4. Nabila Fitriani - 2509116063 - Kelas B
+1. *Kardila Varani Barutu* - 2509116009 - Kelas A
+2. *Zahra Maysita* - 2509116015 - Kelas A
+3. *Mohammed Rifqy Syahdi* - 2509116037 - Kelas A
+4. *Nabila Fitriani* - 2509116063 - Kelas B
 
-## Struktur File Proyek
-```text
-PerpustakaanKampus-Java-Kelompok-24/
-├── assets/                                  
-│   ├── 01-kategori-buku.jpeg
-│   ├── 02-tambah-buku.jpeg
-│   ├── 03-tampilkan-buku.jpeg
-│   ├── 04-hapus-buku.jpeg
-│   ├── 05-lokasi-valid.jpeg
-│   ├── 06-lokasi-invalid.jpeg
-│   ├── 07-antrean-tambah.jpeg
-│   ├── 08-antrean-panggil.jpeg
-│   ├── 09-peminjaman-valid.jpeg
-│   ├── 10-peminjaman-kategori-salah.jpeg
-│   ├── 11-peminjaman-salah-3x.jpeg
-│   ├── 12-undo-transaksi.jpeg
-│   └── 13-keluar-program.jpeg
-├── src/
-│   └── com/mycompany/sistemperpustakaan/
-│       └── SistemPerpustakaan.java          
-├── .gitignore
-└── README.md
-```
 
 ## Studi Kasus dan Tujuan Program
 Bayangkan petugas perpustakaan kampus di hari yang ramai. Mahasiswa antre di loket, buku baru datang dan harus dicatat, ada yang menanyakan di rak mana buku tertentu disimpan, dan di akhir pekan petugas ingin tahu kategori apa yang paling sering dipinjam. Kalau ada salah catat, transaksinya juga harus bisa dibatalkan.
 
-Program ini kami buat untuk menjawab keadaan seperti itu. Tujuan kami ada dua. Yang pertama, menyediakan satu aplikasi konsol sederhana yang menunya gampang diikuti. Yang kedua, belajar memakai enam struktur data di tempat yang memang cocok untuknya, supaya kami paham kapan array dipakai dan kapan koleksi dinamis lebih pas.
+Program ini kami buat untuk menjawab keadaan seperti itu. Tujuannya ada lima:
+
+1. Menerapkan enam struktur data dalam satu program Java.
+2. Menyediakan menu untuk melihat kategori dan mengelola daftar buku.
+3. Mencatat lokasi buku berdasarkan lantai, rak, dan posisi.
+4. Mengatur antrean mahasiswa sesuai urutan kedatangan.
+5. Mencatat transaksi peminjaman, dan menyediakan pembatalan kalau ada yang salah catat.
+
+Selain itu, tugas ini jadi kesempatan buat kami belajar kapan array dipakai dan kapan koleksi dinamis lebih pas.
 
 ## Penerapan Enam Struktur Data
 
@@ -52,7 +37,7 @@ Variabelnya `String[] kategoriBuku`, isinya empat kategori: Pemrograman, Matemat
 Variabelnya `int[][] statPinjam`, ukurannya 4 x 7. Barisnya mewakili kategori, kolomnya mewakili hari dari Senin (0) sampai Minggu (6). Jadi `statPinjam[2][4]` adalah jumlah peminjaman buku Jaringan Komputer di hari Jumat. Setiap peminjaman yang valid menambah satu pada sel yang sesuai.
 
 ### Array 3 Dimensi
-Variabelnya `String[][][] lokasiBuku`, ukurannya 3 x 5 x 10. Kami membayangkannya sebagai gedung dengan 3 lantai, tiap lantai punya 5 rak, dan tiap rak punya 10 posisi buku. Isi selnya adalah judul buku yang disimpan di koordinat itu, dan sel yang kosong berarti belum ada buku di sana.
+Variabelnya `String[][][] lokasiBuku`, ukurannya 3 x 5 x 10. Kami membayangkannya sebagai gedung dengan 3 lantai, tiap lantai punya 5 rak, dan tiap rak punya 10 posisi buku. Totalnya ada 3 x 5 x 10 = 150 slot. Isi selnya adalah judul buku yang disimpan di koordinat itu, dan sel yang kosong berarti belum ada buku di sana.
 
 ### ArrayList
 Variabelnya `ArrayList<String> daftarBuku`. Jumlah buku di perpustakaan terus berubah, sehingga kami butuh wadah yang ukurannya bisa menyesuaikan sendiri. ArrayList mendukung tambah, tampil, dan hapus buku tanpa kami mengatur kapasitas.
@@ -61,10 +46,33 @@ Variabelnya `ArrayList<String> daftarBuku`. Jumlah buku di perpustakaan terus be
 Variabelnya `Stack<String> riwayatTransaksi`. Tiap peminjaman yang berhasil dicatat dimasukkan ke tumpukan lewat `push()`, jadi transaksi paling baru selalu ada di puncak. Sifat LIFO ini yang kami manfaatkan saat membatalkan transaksi. Di menu pembatalan, pengguna menyebut nama peminjam, lalu program menelusuri tumpukan dari atas dan membatalkan transaksi terbaru atas nama itu.
 
 ### Queue
-Variabelnya `Queue<String> antrianMhs`, dengan `LinkedList` sebagai objek di belakangnya. Mahasiswa yang datang lebih dulu dipanggil lebih dulu (FIFO), seperti antrean di loket sungguhan.
+Variabelnya `Queue<String> antrianMhs`, dengan `LinkedList` sebagai objek di belakangnya. Mahasiswa yang datang lebih dulu dipanggil lebih dulu (FIFO), seperti antrean di loket sungguhan. Tiga method yang kami pakai: `add()` memasukkan mahasiswa ke belakang antrean, `poll()` mengambil sekaligus menghapus yang paling depan, dan `isEmpty()` mengecek apakah antrean kosong sebelum ada yang dipanggil.
+
+### Hubungan keenam struktur data
+Keenam struktur data ini tidak jalan sendiri-sendiri. Array 1D menyediakan daftar kategori yang dipakai menu 1 dan menu 5. Di menu 5, satu peminjaman yang berhasil sekaligus menambah angka di Array 2D dan menaruh catatannya ke Stack, dan nama kategori di catatan itu diambil dari Array 1D. Stack kemudian dipakai menu 6 untuk pembatalan.
+
+Sementara itu ArrayList (daftar buku), Array 3D (lokasi buku), dan Queue (antrean mahasiswa) masing-masing punya menu sendiri dan menyimpan teks yang diketik pengguna.
 
 ## Penjelasan Source Code
 Bagian ini menelusuri `SistemPerpustakaan.java` dari atas sampai bawah. Kodenya kami tampilkan utuh per bagian, lalu dijelaskan satu per satu dengan bahasa kami sendiri.
+
+### Ringkasan variabel dan perintah
+Sebelum masuk ke kodenya, ini ringkasan perintah dan struktur yang paling sering muncul.
+
+| Variabel / perintah | Fungsinya | Contoh di program |
+|---|---|---|
+| `String[]` | Menyimpan sekumpulan teks dengan ukuran tetap | `kategoriBuku` |
+| `int[][]` dan `String[][][]` | Menyimpan data berbentuk tabel dan kubus (dua dan tiga indeks) | `statPinjam`, `lokasiBuku` |
+| `ArrayList` | Daftar yang bisa bertambah dan berkurang lewat `add()` dan `remove()` | `daftarBuku` |
+| `Queue` (`LinkedList`) | Antrean FIFO dengan `add()`, `poll()`, dan `isEmpty()` | `antrianMhs` |
+| `Stack` | Tumpukan LIFO dengan `push()` dan `pop()` | `riwayatTransaksi`, `tempStack` |
+| `while` | Mengulang selama kondisinya benar | menu utama, validasi input |
+| `for` | Mengulang berdasarkan indeks | menampilkan kategori |
+| `if-else` | Memilih tindakan berdasarkan kondisi | validasi lokasi, kategori, dan hari |
+| `switch-case` | Memilih cabang berdasarkan nilai | menu utama dan menu antrean |
+| `break` | Menghentikan perulangan atau cabang | keluar dari `while` saat input sudah benar |
+| `nextInt()` dan `nextLine()` | Membaca angka dan satu baris teks | `pilihan`, nama buku |
+| `boolean` | Penanda benar atau salah | `lanjut`, `ketemu` |
 
 ### 1. Package dan import
 ```java
